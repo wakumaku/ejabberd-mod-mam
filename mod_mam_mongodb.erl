@@ -1,5 +1,5 @@
 %%%----------------------------------------------------------------------
-%%% File    : mod_mam.erl
+%%% File    : mod_mam_mongodb.erl
 %%% Author  : Gregor Uhlenheuer <kongo2002@gmail.com>
 %%% Purpose : Message Archive Management (XEP-0313)
 %%% Created : 29 Jan 2014 by Gregor Uhlenheuer <kongo2002@gmail.com>
@@ -22,7 +22,7 @@
 %%% 02111-1307 USA
 %%%----------------------------------------------------------------------
 
--module(mod_mam).
+-module(mod_mam_mongodb).
 -author('kongo2002@gmail.com').
 
 -behaviour(gen_server).
@@ -54,7 +54,7 @@
          terminate/2,
          code_change/3]).
 
--define(PROCNAME, ejabberd_mod_mam).
+-define(PROCNAME, ejabberd_mod_mam_mongodb).
 -define(POOL_SIZE, 10).
 -define(MAX_QUERY_LIMIT, 50).
 
@@ -201,7 +201,7 @@ get_disco_features(Acc, _From, _To, _Node, _Lang) ->
 %% @end
 %%--------------------------------------------------------------------
 init([Host, Opts]) ->
-    ?INFO_MSG("Starting mod_mam module of '~s'", [Host]),
+    ?INFO_MSG("Starting mod_mam_mongodb module of '~s'", [Host]),
 
     % get options
     IQDisc = gen_mod:get_opt(iqdisc, Opts, false, one_queue),
@@ -361,7 +361,7 @@ terminate(_Reason, State) ->
     Host = State#state.host,
     {Pool, _Db, _Coll} = State#state.mongo,
 
-    ?INFO_MSG("Stopping mod_mam module of '~s'", [Host]),
+    ?INFO_MSG("Stopping mod_mam_mongodb module of '~s'", [Host]),
 
     ejabberd_hooks:delete(user_send_packet, Host, ?MODULE, send_packet, 80),
     ejabberd_hooks:delete(user_receive_packet, Host, ?MODULE, receive_packet, 80),
